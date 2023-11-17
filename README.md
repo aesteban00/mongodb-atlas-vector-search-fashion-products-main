@@ -44,11 +44,11 @@ Another example:
     - Following libraries will be required
       - Flask==2.1.0
       - Pillow==9.3.0
-      - pymongo==4.1.1
+      - pymongo[srv]==4.1.1
       - sentence_transformers==2.2.2
     - `requirements.txt` includes all the dependencies and if you want to install dependencies in one shot:
       ```bash
-      pip install -r requirements.txt
+      pip3 install -r requirements.txt
       ```
 
 # Steps to Install and Test

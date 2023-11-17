@@ -10,6 +10,7 @@ import json
 sys.path.insert(1, '../config/')
 from config_database import mongo_uri, db, collection
 
+
 app = Flask(__name__,             
             static_url_path='', 
             static_folder='../encoder',)
