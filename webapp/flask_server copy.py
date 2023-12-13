@@ -27,12 +27,13 @@ def search():
     vector_query = model.encode(vector_text).tolist()
     pipeline = [
         {
-            "$vectorSearch": {
+            "$search": {
                 "index": "default",
-                "queryVector": vector_query,
-                "path": "imageVector",
-                "numCandidates": 10,
-                "limit": 10
+                "knnBeta": {
+                    "vector": vector_query,
+                    "path": "imageVector",
+                    "k": 10
+                }
             }
         },
         {
@@ -79,16 +80,34 @@ def searchAdvanced():
     vector_query = model.encode(vector_text).tolist()
     pipeline = [
         {
-            "$vectorSearch": {
+            "$search": {
                 "index": "default",
-                "queryVector": vector_query,
-                "path": "imageVector",
-                "numCandidates": 10,
-                "limit": 10,
-                "filter": { "$and": [
-                        {"price": {"$lt": maximumPrice}},
-                        {"averageRating": {"$gt": minRating}}
-                ]}
+                "compound": {
+                    "filter": [
+                        {
+                            "range": {
+                                "path": "price",
+                                "lt": maximumPrice
+                            }
+                        },
+                        {
+                            "range": {
+                                "path": "averageRating",
+                                "gte": minRating
+                            }
+                        }
+                    ],
+                    "must": [
+                        {
+                            "knnBeta": {
+                                "vector": vector_query,
+                                "path": "imageVector",
+                                "k": 10
+                            }
+                        }
+                    ]
+                }
+                
             }
         },
         {
